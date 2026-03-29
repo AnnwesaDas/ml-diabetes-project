@@ -24,6 +24,14 @@ Columns:
 
 ## Setup
 
+Required libraries:
+
+- pandas
+- numpy
+- matplotlib
+- seaborn
+- scikit-learn
+
 Install required dependencies:
 
 ```bash

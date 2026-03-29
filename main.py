@@ -185,7 +185,7 @@ print("\n---- PREDICTION DEMO ----")
 print("Input sample -> Pregnancies=2, Glucose=140, BloodPressure=70, SkinThickness=30, Insulin=100, BMI=32.0, DPF=0.45, Age=35")
 print("Encoded AgeGroup used in sample: 30s")
 print("Predicted Glucose (regression):", pred_glucose[0])
-print("Diabetes Prediction:", "Diabetic" if pred_outcome[0] == 1 else "Non-Diabetic")
+print("Predicted Diabetes Outcome:", "Diabetic" if pred_outcome[0] == 1 else "Non-Diabetic")
 
 # 9. USER INPUT PREDICTION
 print("\n---- USER INPUT PREDICTION ----")
@@ -228,7 +228,7 @@ try:
     user_outcome = clf_model.predict(user_input_clf)
 
     print("\nPredicted Glucose:", user_glucose[0])
-    print("Diabetes Prediction:", "Diabetic" if user_outcome[0] == 1 else "Non-Diabetic")
+    print("Predicted Diabetes Outcome:", "Diabetic" if user_outcome[0] == 1 else "Non-Diabetic")
 
 except ValueError as e:
     print(f"Invalid numeric input ({e}). Skipping user prediction.")

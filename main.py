@@ -34,13 +34,36 @@ print(df.info())
 print("\n--- STATISTICS ---")
 print(df.describe())
 
+# Convert invalid zeros to NaN so missing-value handling is explicit and traceable.
 zero_invalid_cols = ["Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI"]
 for col in zero_invalid_cols:
-    median_val = df.loc[df[col] != 0, col].median()
-    df[col] = df[col].replace(0, median_val)
+    df[col] = df[col].replace(0, np.nan)
 
-print("\n--- MISSING VALUES ---")
+print("\n--- MISSING VALUES (BEFORE FILLING) ---")
 print(df.isnull().sum())
+
+numeric_cols = df.select_dtypes(include=[np.number]).columns
+df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].median())
+
+print("\n--- MISSING VALUES (AFTER FILLING) ---")
+print(df.isnull().sum())
+
+# Create a categorical feature so encoding is demonstrated in a beginner-friendly way.
+df["AgeGroup"] = pd.cut(
+    df["Age"],
+    bins=[20, 30, 40, 50, 60, 100],
+    labels=["20s", "30s", "40s", "50s", "60+"],
+    include_lowest=True,
+)
+
+print("\n--- CATEGORICAL FEATURE PREVIEW ---")
+print(df[["Age", "AgeGroup"]].head())
+
+df_encoded = pd.get_dummies(df, columns=["AgeGroup"], drop_first=False, dtype=int)
+age_group_cols = [col for col in df_encoded.columns if col.startswith("AgeGroup_")]
+
+print("\n--- ENCODING COMPLETED (get_dummies) ---")
+print("Encoded columns:", age_group_cols)
 
 print("\nData preprocessing completed!\n")
 
@@ -64,7 +87,7 @@ plt.savefig("plot_2_bmi_vs_glucose_scatter.png", dpi=150)
 plt.show()
 
 plt.figure(figsize=(10, 7))
-sns.heatmap(df.corr(numeric_only=True), annot=True, cmap="coolwarm", fmt=".2f")
+sns.heatmap(df_encoded.corr(numeric_only=True), annot=True, cmap="coolwarm", fmt=".2f")
 plt.xlabel("Features")
 plt.ylabel("Features")
 plt.title("Correlation Heatmap")
@@ -84,7 +107,7 @@ clf_features = [
     "BMI",
     "DiabetesPedigreeFunction",
     "Age",
-]
+] + age_group_cols
 
 reg_features = [
     "Pregnancies",
@@ -94,13 +117,13 @@ reg_features = [
     "BMI",
     "DiabetesPedigreeFunction",
     "Age",
-]
+] + age_group_cols
 
-X_clf = df[clf_features]
-y_clf = df["Outcome"]
+X_clf = df_encoded[clf_features]
+y_clf = df_encoded["Outcome"]
 
-X_reg = df[reg_features]
-y_reg = df["Glucose"]
+X_reg = df_encoded[reg_features]
+y_reg = df_encoded["Glucose"]
 
 print("Features and targets selected!\n")
 
@@ -147,11 +170,11 @@ print(
 
 # 8. PREDICTION DEMO
 sample_clf_df = pd.DataFrame(
-    [[2, 140, 70, 30, 100, 32.0, 0.45, 35]],
+    [[2, 140, 70, 30, 100, 32.0, 0.45, 35, 0, 1, 0, 0, 0]],
     columns=clf_features,
 )
 sample_reg_df = pd.DataFrame(
-    [[2, 70, 30, 100, 32.0, 0.45, 35]],
+    [[2, 70, 30, 100, 32.0, 0.45, 35, 0, 1, 0, 0, 0]],
     columns=reg_features,
 )
 
@@ -160,6 +183,7 @@ pred_outcome = clf_model.predict(sample_clf_df)
 
 print("\n---- PREDICTION DEMO ----")
 print("Input sample -> Pregnancies=2, Glucose=140, BloodPressure=70, SkinThickness=30, Insulin=100, BMI=32.0, DPF=0.45, Age=35")
+print("Encoded AgeGroup used in sample: 30s")
 print("Predicted Glucose (regression):", pred_glucose[0])
 print("Diabetes Prediction:", "Diabetic" if pred_outcome[0] == 1 else "Non-Diabetic")
 
@@ -178,13 +202,27 @@ try:
     age = int(input("Enter Age: "))
 
     user_input_clf = pd.DataFrame(
-        [[preg, glucose, bp, skin, insulin, bmi, dpf, age]],
+        [[preg, glucose, bp, skin, insulin, bmi, dpf, age, 0, 0, 0, 0, 0]],
         columns=clf_features,
     )
     user_input_reg = pd.DataFrame(
-        [[preg, bp, skin, insulin, bmi, dpf, age]],
+        [[preg, bp, skin, insulin, bmi, dpf, age, 0, 0, 0, 0, 0]],
         columns=reg_features,
     )
+
+    user_age_group = pd.cut(
+        pd.Series([age]),
+        bins=[20, 30, 40, 50, 60, 100],
+        labels=["20s", "30s", "40s", "50s", "60+"],
+        include_lowest=True,
+    ).iloc[0]
+
+    if pd.notna(user_age_group):
+        age_col = f"AgeGroup_{user_age_group}"
+        if age_col in user_input_clf.columns:
+            user_input_clf.loc[0, age_col] = 1
+        if age_col in user_input_reg.columns:
+            user_input_reg.loc[0, age_col] = 1
 
     user_glucose = reg_model.predict(user_input_reg)
     user_outcome = clf_model.predict(user_input_clf)

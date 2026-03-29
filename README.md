@@ -42,7 +42,7 @@ python main.py
 |---|---|---|
 | 1 | Import Libraries | Imports data, plotting, and ML libraries |
 | 2 | Load Dataset | Reads `diabetes.csv` into a DataFrame |
-| 3 | Preprocessing | Replaces medically invalid zero values with column medians and checks nulls |
+| 3 | Preprocessing | Converts invalid zeros to missing values, fills missing values with medians, and demonstrates categorical encoding with `get_dummies` |
 | 4 | Visualization | Builds and saves histogram, scatter, and heatmap plots |
 | 5 | Feature Selection | Defines feature/target sets for classification and regression |
 | 6 | Train-Test Split | Splits data for evaluation and stratifies classification target |

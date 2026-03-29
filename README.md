@@ -1,15 +1,26 @@
-# ml-diabetes-project
+# ML Diabetes Project
 
-A machine learning lab project that uses the Pima Indians Diabetes dataset for:
-- Classification: predicting diabetes outcome (`Outcome`)
-- Regression: estimating glucose level (`Glucose`)
+Beginner-friendly machine learning lab project using the Pima Indians Diabetes dataset.
+
+The project includes two tasks:
+- Classification: predict diabetes outcome (Outcome)
+- Regression: estimate glucose level (Glucose)
+
+## Project Files
+
+- diabetes.csv: input dataset
+- ml_diabetes_project.ipynb: notebook version (best for viva and Colab)
+- main.py: script version (run from terminal)
+- requirements.txt: Python dependencies
+- plot_1_glucose_histogram.png: saved histogram
+- plot_2_bmi_vs_glucose_scatter.png: saved scatter plot
+- plot_3_correlation_heatmap.png: saved heatmap
 
 ## Dataset
 
 - Name: Pima Indians Diabetes Dataset
 - Rows: 768
 - Columns: 9
-- File: `diabetes.csv`
 
 Columns:
 - Pregnancies
@@ -22,43 +33,55 @@ Columns:
 - Age
 - Outcome
 
-## Setup
+## Requirements
 
-Required libraries:
-
+Libraries used:
 - pandas
 - numpy
 - matplotlib
 - seaborn
 - scikit-learn
 
-Install required dependencies:
+Install all dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Run
+## How To Run
+
+### Option 1: Run Python Script (VS Code Terminal)
 
 ```bash
 python main.py
 ```
 
-## Script Sections
+### Option 2: Run Notebook (VS Code or Colab)
 
-| Step | Section | What it does |
-|---|---|---|
-| 1 | Import Libraries | Imports data, plotting, and ML libraries |
-| 2 | Load Dataset | Reads `diabetes.csv` into a DataFrame |
-| 3 | Preprocessing | Converts invalid zeros to missing values, fills missing values with medians, and demonstrates categorical encoding with `get_dummies` |
-| 4 | Visualization | Builds and saves histogram, scatter, and heatmap plots |
-| 5 | Feature Selection | Defines feature/target sets for classification and regression |
-| 6 | Train-Test Split | Splits data for evaluation and stratifies classification target |
-| 7 | Model Training | Trains Linear Regression and Decision Tree models |
-| 8 | Evaluation | Prints MSE, R2, accuracy, confusion matrix, and classification report |
-| 9 | Prediction Demo | Runs a sample prediction for both tasks |
-| 10 | User Input | Accepts manual input for a demo prediction |
+1. Open ml_diabetes_project.ipynb
+2. Select Python kernel/interpreter
+3. Click Run All
 
-## Educational Use Only
+## ML Pipeline Covered
+
+| Step | Description |
+|---|---|
+| 1 | Import libraries |
+| 2 | Load CSV dataset |
+| 3 | Preprocessing: info/describe, missing value handling, encoding |
+| 4 | Visualization: histogram, scatter plot, heatmap |
+| 5 | Feature selection (X and y) |
+| 6 | Train-test split |
+| 7 | Model training: Linear Regression + Decision Tree Classifier |
+| 8 | Evaluation: MSE, R2, accuracy, confusion matrix, classification report |
+| 9 | Prediction demo with sample input |
+| 10 | User input prediction demo |
+
+## Notes
+
+- Plot images are saved so results remain visible even without rerunning code.
+- User input prediction is for demonstration purposes only.
+
+## Educational Disclaimer
 
 This project is for educational purposes only and is not medical advice.

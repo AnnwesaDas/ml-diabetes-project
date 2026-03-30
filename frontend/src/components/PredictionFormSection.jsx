@@ -165,13 +165,13 @@ function PredictionFormSection() {
                   label="Estimated Glucose Level"
                   value={`${result.estimatedGlucose} mg/dL`}
                   tone={result.estimatedGlucose > 140 ? 'warning' : 'good'}
-                  helper="Mock regression estimate"
+                  helper="Regression estimate"
                 />
                 <ResultCard
                   label="Risk State"
                   value={result.outcome === 'Diabetic' ? 'Elevated Risk' : 'Lower Risk'}
                   tone={result.outcome === 'Diabetic' ? 'critical' : 'good'}
-                  helper="Educational interpretation from mock classification"
+                  helper="Classification interpretation"
                 />
               </div>
             ) : null}

@@ -1,8 +1,8 @@
 /**
  * Prediction Service
  * Handles communication with the ML backend API for diabetes predictions
- * 
- * API Endpoint: POST /api/predict
+ *
+ * API Endpoint: POST /predict
  * 
  * Toggle between mock and real API:
  * - Set USE_MOCK_API = true for local development without backend
@@ -11,6 +11,11 @@
 
 const USE_MOCK_API = false; // Set to false to use real backend API
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+function pickNumber(payload, primaryKey, fallbackKey) {
+  const value = payload[primaryKey] ?? payload[fallbackKey];
+  return parseFloat(value) || 0;
+}
 
 /**
  * Helper function to normalize values between 0 and 1
@@ -23,28 +28,33 @@ function normalize(value, min, max) {
  * Build a mock prediction for testing without backend
  */
 function buildMockPrediction(payload) {
+  const glucose = pickNumber(payload, 'Glucose', 'glucose');
+  const bmi = pickNumber(payload, 'BMI', 'bmi');
+  const age = pickNumber(payload, 'Age', 'age');
+  const dpf = pickNumber(payload, 'DiabetesPedigreeFunction', 'diabetesPedigreeFunction');
+  const insulin = pickNumber(payload, 'Insulin', 'insulin');
+  const bloodPressure = pickNumber(payload, 'BloodPressure', 'bloodPressure');
+  const skinThickness = pickNumber(payload, 'SkinThickness', 'skinThickness');
+  const pregnancies = pickNumber(payload, 'Pregnancies', 'pregnancies');
+
   const riskScore =
-    normalize(payload.Glucose, 40, 250) * 0.34 +
-    normalize(payload.BMI, 10, 70) * 0.18 +
-    normalize(payload.Age, 18, 100) * 0.15 +
-    normalize(payload.DiabetesPedigreeFunction, 0.05, 3) * 0.14 +
-    normalize(payload.Insulin, 0, 900) * 0.07 +
-    normalize(payload.BloodPressure, 30, 140) * 0.06 +
-    normalize(payload.SkinThickness, 5, 99) * 0.04 +
-    normalize(payload.Pregnancies, 0, 20) * 0.02;
+    normalize(glucose, 40, 250) * 0.34 +
+    normalize(bmi, 10, 70) * 0.18 +
+    normalize(age, 18, 100) * 0.15 +
+    normalize(dpf, 0.05, 3) * 0.14 +
+    normalize(insulin, 0, 900) * 0.07 +
+    normalize(bloodPressure, 30, 140) * 0.06 +
+    normalize(skinThickness, 5, 99) * 0.04 +
+    normalize(pregnancies, 0, 20) * 0.02;
 
   const estimatedGlucose = Math.round(
-    payload.Glucose * 0.82 + payload.BMI * 1.15 + payload.Age * 0.25 + payload.Insulin * 0.03
+    glucose * 0.82 + bmi * 1.15 + age * 0.25 + insulin * 0.03
   );
 
   return {
-    success: true,
-    prediction: {
-      estimated_glucose: estimatedGlucose,
-      diabetes_risk: riskScore >= 0.52 ? 'Diabetic' : 'Non-Diabetic',
-      confidence: Math.abs(riskScore - 0.5) * 2,
-      diabetes_probability: riskScore,
-    }
+    predicted_outcome: riskScore >= 0.52 ? 1 : 0,
+    predicted_outcome_label: riskScore >= 0.52 ? 'Diabetic' : 'Non-Diabetic',
+    estimated_glucose: estimatedGlucose,
   };
 }
 
@@ -54,14 +64,14 @@ function buildMockPrediction(payload) {
  */
 function formatPayloadForBackend(payload) {
   return {
-    Pregnancies: parseFloat(payload.Pregnancies) || 0,
-    Glucose: parseFloat(payload.Glucose) || 0,
-    BloodPressure: parseFloat(payload.BloodPressure) || 0,
-    SkinThickness: parseFloat(payload.SkinThickness) || 0,
-    Insulin: parseFloat(payload.Insulin) || 0,
-    BMI: parseFloat(payload.BMI) || 0,
-    DiabetesPedigreeFunction: parseFloat(payload.DiabetesPedigreeFunction) || 0,
-    Age: parseFloat(payload.Age) || 0,
+    Pregnancies: pickNumber(payload, 'Pregnancies', 'pregnancies'),
+    Glucose: pickNumber(payload, 'Glucose', 'glucose'),
+    BloodPressure: pickNumber(payload, 'BloodPressure', 'bloodPressure'),
+    SkinThickness: pickNumber(payload, 'SkinThickness', 'skinThickness'),
+    Insulin: pickNumber(payload, 'Insulin', 'insulin'),
+    BMI: pickNumber(payload, 'BMI', 'bmi'),
+    DiabetesPedigreeFunction: pickNumber(payload, 'DiabetesPedigreeFunction', 'diabetesPedigreeFunction'),
+    Age: pickNumber(payload, 'Age', 'age'),
   };
 }
 
@@ -69,20 +79,43 @@ function formatPayloadForBackend(payload) {
  * Transform backend response to frontend format if needed
  */
 function transformBackendResponse(response) {
-  if (!response.success) {
-    throw new Error(response.error || 'Prediction failed');
+  if (!response || typeof response !== 'object') {
+    throw new Error('Invalid API response.');
   }
 
   return {
-    status: 'success',
-    prediction: {
-      outcome: response.prediction.diabetes_risk,
-      diabetesProbability: response.prediction.diabetes_probability,
-      estimatedGlucose: response.prediction.estimated_glucose,
-      confidence: (response.prediction.confidence * 100).toFixed(1) + '%',
-      rawResponse: response.prediction,
-    }
+    outcome: response.predicted_outcome_label,
+    outcomeCode: response.predicted_outcome,
+    estimatedGlucose: response.estimated_glucose,
+    confidence: 'N/A',
   };
+}
+
+function extractApiErrorMessage(errorData, fallbackMessage) {
+  if (!errorData) {
+    return fallbackMessage;
+  }
+
+  if (typeof errorData.detail === 'string') {
+    return errorData.detail;
+  }
+
+  if (Array.isArray(errorData.detail) && errorData.detail.length > 0) {
+    const first = errorData.detail[0];
+    if (typeof first === 'string') {
+      return first;
+    }
+    if (first && typeof first === 'object' && first.msg) {
+      const field = Array.isArray(first.loc) ? first.loc[first.loc.length - 1] : 'field';
+      return `${field}: ${first.msg}`;
+    }
+  }
+
+  if (typeof errorData.error === 'string') {
+    return errorData.error;
+  }
+
+  return fallbackMessage;
 }
 
 /**
@@ -109,7 +142,7 @@ export async function runPrediction(payload) {
   try {
     const formattedPayload = formatPayloadForBackend(payload);
 
-    const response = await fetch(`${API_BASE_URL}/api/predict`, {
+    const response = await fetch(`${API_BASE_URL}/predict`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -121,7 +154,7 @@ export async function runPrediction(payload) {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        errorData.error || `API error ${response.status}: ${response.statusText}`
+        extractApiErrorMessage(errorData, `API error ${response.status}: ${response.statusText}`)
       );
     }
 

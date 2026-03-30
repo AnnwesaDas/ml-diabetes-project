@@ -6,18 +6,22 @@ function HeroSection() {
           <span className="hero-bubble bubble-one" aria-hidden="true" />
           <span className="hero-bubble bubble-two" aria-hidden="true" />
           <span className="hero-bubble bubble-three" aria-hidden="true" />
-          <span className="badge">Educational Project Only</span>
-          <h1 id="project-title">ML Diabetes Project</h1>
+          <span className="badge">AI-Powered Healthcare Analytics</span>
+          <h1 id="project-title">
+            Diabetes Risk
+            <br />
+            Prediction Engine
+          </h1>
           <p>
-            A professional healthcare-data style workspace for diabetes risk prediction and glucose
-            estimation using machine learning.
+            Advanced machine learning models for early diabetes detection and glucose estimation.
+            Empowering clinicians with data-driven insights for proactive patient care.
           </p>
           <div className="hero-actions">
             <a className="btn-primary" href="#prediction-workspace">
-              Try Prediction
+              Run Prediction
             </a>
             <a className="btn-ghost" href="#insights-visualizations">
-              View Insights
+              Explore Insights
             </a>
           </div>
         </div>

@@ -6,7 +6,7 @@ import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-import uvicorn
+import uvicor
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field

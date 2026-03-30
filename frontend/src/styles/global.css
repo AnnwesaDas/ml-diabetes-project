@@ -97,6 +97,14 @@ main {
   font-size: 0.95rem;
 }
 
+.brand-logo {
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(12, 35, 64, 0.35);
+  flex-shrink: 0;
+}
+
 .brand-dot {
   width: 0.62rem;
   height: 0.62rem;

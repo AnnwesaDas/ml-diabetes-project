@@ -16,7 +16,13 @@ function TopNavbar() {
     <header className="top-nav-wrap">
       <div className="container top-nav">
         <a className="brand" href="#hero-dashboard">
-          <span className="brand-dot" />
+          <img
+            className="brand-logo"
+            src="/diabetes-logo.svg"
+            alt="Diabetes Risk Prediction logo"
+            width="30"
+            height="30"
+          />
           ML Diabetes Project
         </a>
 

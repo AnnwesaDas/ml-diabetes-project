@@ -4,7 +4,7 @@ function HeroSection() {
       <div className="container hero-grid">
         <div className="hero-content fade-up">
           <span className="badge">Educational Project Only</span>
-          <h1 id="project-title">ML Diabetes Project</h1>
+          <h1 id="project-title">Diabetes Risk and Glucose Estimation Dashboard</h1>
           <p>
             Predict diabetes risk and estimate glucose level using machine learning models trained on
             the Pima Indians Diabetes dataset.

@@ -1,4 +1,5 @@
 import warnings
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -17,13 +18,33 @@ from sklearn.tree import DecisionTreeClassifier
 
 print("Libraries imported successfully!\n")
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+PLOTS_DIR = PROJECT_ROOT / "data" / "plots"
+PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def resolve_dataset_path():
+    """Resolve dataset path relative to project files, not terminal CWD."""
+    candidates = [
+        PROJECT_ROOT / "diabetes.csv",
+        PROJECT_ROOT / "data" / "diabetes.csv",
+    ]
+    for path in candidates:
+        if path.exists():
+            return path
+    raise FileNotFoundError(
+        "diabetes.csv not found. Expected one of: "
+        + ", ".join(str(path) for path in candidates)
+    )
+
 # ============================================
 # MACHINE LEARNING LAB PROJECT
 # Diabetes Prediction + Glucose Regression
 # ============================================
 
 # 1. LOAD DATASET
-df = pd.read_csv("diabetes.csv")
+dataset_path = resolve_dataset_path()
+df = pd.read_csv(dataset_path)
 print("Dataset loaded successfully!\n")
 print(df.head())
 
@@ -74,7 +95,7 @@ plt.xlabel("Glucose")
 plt.ylabel("Frequency")
 plt.title("Distribution of Glucose")
 plt.tight_layout()
-plt.savefig("plot_1_glucose_histogram.png", dpi=150)
+plt.savefig(PLOTS_DIR / "plot_1_glucose_histogram.png", dpi=150)
 plt.show()
 
 plt.figure(figsize=(8, 5))
@@ -83,7 +104,7 @@ plt.xlabel("BMI")
 plt.ylabel("Glucose")
 plt.title("BMI vs Glucose")
 plt.tight_layout()
-plt.savefig("plot_2_bmi_vs_glucose_scatter.png", dpi=150)
+plt.savefig(PLOTS_DIR / "plot_2_bmi_vs_glucose_scatter.png", dpi=150)
 plt.show()
 
 plt.figure(figsize=(10, 7))
@@ -92,7 +113,7 @@ plt.xlabel("Features")
 plt.ylabel("Features")
 plt.title("Correlation Heatmap")
 plt.tight_layout()
-plt.savefig("plot_3_correlation_heatmap.png", dpi=150)
+plt.savefig(PLOTS_DIR / "plot_3_correlation_heatmap.png", dpi=150)
 plt.show()
 
 print("Visualization completed and saved!\n")

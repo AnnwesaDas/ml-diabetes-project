@@ -1,20 +1,20 @@
 # ML Diabetes Project
 
-Beginner-friendly machine learning lab project using the Pima Indians Diabetes dataset.
+Beginner-friendly diabetes machine learning project using the Pima Indians dataset.
 
-The project includes two tasks:
-- Classification: predict diabetes outcome (Outcome)
-- Regression: estimate glucose level (Glucose)
+Core tasks:
+- Classification: predict diabetes outcome (`Outcome`)
+- Regression: estimate glucose level (`Glucose`)
 
-## Project Files
+## Project Structure
 
-- diabetes.csv: input dataset
-- ml_diabetes_project.ipynb: notebook version (best for viva and Colab)
-- main.py: script version (run from terminal)
-- requirements.txt: Python dependencies
-- plot_1_glucose_histogram.png: saved histogram
-- plot_2_bmi_vs_glucose_scatter.png: saved scatter plot
-- plot_3_correlation_heatmap.png: saved heatmap
+- `data/diabetes.csv`: input dataset
+- `data/plots/`: generated plot images from `main.py`
+- `main.py`: original script-based ML pipeline
+- `backend/`: deployable FastAPI backend for model serving
+- `frontend/`: React dashboard frontend
+- `ml_diabetes_project.ipynb`: notebook version
+- `requirements.txt`: dependencies for `main.py`
 
 ## Dataset
 
@@ -42,7 +42,7 @@ Libraries used:
 - seaborn
 - scikit-learn
 
-Install all dependencies:
+Install dependencies for the script:
 
 ```bash
 pip install -r requirements.txt
@@ -50,11 +50,17 @@ pip install -r requirements.txt
 
 ## How To Run
 
-### Option 1: Run Python Script (VS Code Terminal)
+### Option 1: Run Script Version
 
 ```bash
-python main.py
+py -3.11 main.py
 ```
+
+The script will:
+- train both models
+- evaluate metrics
+- save charts to `data/plots/`
+- ask for optional user input prediction at the end
 
 ### Option 2: Run Notebook (VS Code or Colab)
 
@@ -70,19 +76,7 @@ npm install
 npm run dev
 ```
 
-The frontend includes:
-- Responsive healthcare-style dashboard UI
-- Prediction form with validation and mock outputs
-- Visualization cards wired to saved plot images
-- ML pipeline timeline and metric cards
-
-Frontend chart assets are placed in:
-- frontend/public/charts/plot_1_glucose_histogram.png
-- frontend/public/charts/plot_2_bmi_vs_glucose_scatter.png
-- frontend/public/charts/plot_3_correlation_heatmap.png
-
-For frontend-specific details, see:
-- frontend/README.md
+For backend API setup and deployment, see `backend/README.md`.
 
 ## ML Pipeline Covered
 
@@ -101,7 +95,8 @@ For frontend-specific details, see:
 
 ## Notes
 
-- Plot images are saved so results remain visible even without rerunning code.
+- Core ML logic in `main.py` is preserved for learning and comparison.
+- Generated artifacts are organized under `data/` and `backend/model/`.
 - User input prediction is for demonstration purposes only.
 
 ## Educational Disclaimer

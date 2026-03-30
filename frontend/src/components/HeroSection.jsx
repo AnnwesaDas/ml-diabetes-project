@@ -1,20 +1,31 @@
 function HeroSection() {
   return (
-    <section className="hero-section" aria-labelledby="project-title">
+    <section id="hero-dashboard" className="hero-section" aria-labelledby="project-title">
       <div className="container hero-grid">
-        <div className="hero-content fade-up">
+        <div className="hero-content">
+          <span className="hero-bubble bubble-one" aria-hidden="true" />
+          <span className="hero-bubble bubble-two" aria-hidden="true" />
+          <span className="hero-bubble bubble-three" aria-hidden="true" />
           <span className="badge">Educational Project Only</span>
-          <h1 id="project-title">Diabetes Risk and Glucose Estimation Dashboard</h1>
+          <h1 id="project-title">ML Diabetes Project</h1>
           <p>
-            Predict diabetes risk and estimate glucose level using machine learning models trained on
-            the Pima Indians Diabetes dataset.
+            A professional healthcare-data style workspace for diabetes risk prediction and glucose
+            estimation using machine learning.
           </p>
+          <div className="hero-actions">
+            <a className="btn-primary" href="#prediction-workspace">
+              Try Prediction
+            </a>
+            <a className="btn-ghost" href="#insights-visualizations">
+              View Insights
+            </a>
+          </div>
         </div>
-        <aside className="hero-note fade-up">
-          <h3>Use Case</h3>
+        <aside className="hero-note">
+          <h3>Platform Summary</h3>
           <p>
-            This dashboard demonstrates beginner-friendly ML workflows with classification,
-            regression, metrics, and visual insights.
+            Explore two ML tasks in one interface: classification for diabetes outcome and
+            regression for glucose estimation, supported by visual diagnostics and metrics.
           </p>
           <p className="note-small">For educational use only. Not medical advice.</p>
         </aside>

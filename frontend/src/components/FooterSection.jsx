@@ -1,9 +1,12 @@
 function FooterSection() {
   return (
-    <footer className="footer">
+    <footer id="footer-note" className="footer">
       <div className="container footer-inner">
         <p>ML Diabetes Project</p>
-        <p>This is a student machine learning lab project for educational purposes only, not medical advice.</p>
+        <p>
+          Student machine learning lab project built for portfolio and educational demonstration.
+        </p>
+        <p>This interface is for educational use only and does not provide medical advice.</p>
       </div>
     </footer>
   );

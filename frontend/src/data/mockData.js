@@ -16,6 +16,33 @@ export const aboutCards = [
   }
 ];
 
+export const dashboardHighlights = [
+  {
+    id: 'classification-model',
+    label: 'Classification Model',
+    value: 'Decision Tree Classifier',
+    helper: 'Binary outcome: diabetic or non-diabetic'
+  },
+  {
+    id: 'regression-model',
+    label: 'Regression Model',
+    value: 'Linear Regression',
+    helper: 'Glucose level estimation workflow'
+  },
+  {
+    id: 'dataset-size',
+    label: 'Dataset Size',
+    value: '768 Rows / 9 Columns',
+    helper: 'Pima Indians Diabetes dataset'
+  },
+  {
+    id: 'key-accuracy',
+    label: 'Key Accuracy Metric',
+    value: '78.6%',
+    helper: 'Validation accuracy snapshot'
+  }
+];
+
 export const predictionFields = [
   {
     id: 'pregnancies',
@@ -96,18 +123,21 @@ export const chartCards = [
     id: 'glucose-dist',
     title: 'Glucose Distribution',
     caption: 'Histogram of glucose values from the dataset.',
+    insight: 'Most samples are concentrated in the mid-glucose range, with a smaller right-tail of high values.',
     imageUrl: '/charts/plot_1_glucose_histogram.png'
   },
   {
     id: 'bmi-glucose',
     title: 'BMI vs Glucose',
     caption: 'Scatter plot showing relationship between BMI and glucose.',
+    insight: 'The plot suggests a mild positive trend where higher BMI often appears with higher glucose levels.',
     imageUrl: '/charts/plot_2_bmi_vs_glucose_scatter.png'
   },
   {
     id: 'correlation-heatmap',
     title: 'Correlation Heatmap',
     caption: 'Feature correlation matrix used for quick feature inspection.',
+    insight: 'Glucose and BMI show useful signal for both classification and regression-oriented modeling.',
     imageUrl: '/charts/plot_3_correlation_heatmap.png'
   }
 ];

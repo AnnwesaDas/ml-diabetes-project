@@ -3,16 +3,16 @@ import { metrics } from '../data/mockData';
 
 function MetricsSection() {
   return (
-    <section className="section" aria-labelledby="metrics-title">
+    <section id="model-metrics" className="section" aria-labelledby="metrics-title">
       <div className="container">
         <SectionHeader
           eyebrow="Model Metrics"
-          title="Performance Snapshot"
-          description="Sample values are shown for portfolio/demo use. Replace with backend metrics later."
+          title="Performance Analytics"
+          description="Mock performance figures are displayed in a production-style analytics layout."
         />
         <div className="card-grid four-col">
           {metrics.map((metric) => (
-            <article key={metric.id} className={`surface-card metric-card ${metric.tone} fade-up`}>
+            <article key={metric.id} className={`surface-card metric-card ${metric.tone}`}>
               <p>{metric.label}</p>
               <h3>{metric.value}</h3>
             </article>

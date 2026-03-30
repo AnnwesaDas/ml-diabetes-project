@@ -2,6 +2,11 @@
 
 Modern responsive frontend for the ML Diabetes Project.
 
+Design style:
+- Premium healthcare-data dashboard aesthetic
+- Responsive product-style sections and cards
+- Mock prediction workflow with clear loading, empty, and error states
+
 ## Run Locally
 
 ```bash
@@ -25,7 +30,7 @@ npm run preview
 src/
   components/
     HeroSection.jsx
-    AboutSection.jsx
+    DashboardHighlightsSection.jsx
     PredictionFormSection.jsx
     VisualizationsSection.jsx
     PipelineSection.jsx

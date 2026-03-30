@@ -1,5 +1,6 @@
 import HeroSection from './components/HeroSection';
-import AboutSection from './components/AboutSection';
+import TopNavbar from './components/TopNavbar';
+import DashboardHighlightsSection from './components/DashboardHighlightsSection';
 import PredictionFormSection from './components/PredictionFormSection';
 import VisualizationsSection from './components/VisualizationsSection';
 import PipelineSection from './components/PipelineSection';
@@ -9,9 +10,10 @@ import FooterSection from './components/FooterSection';
 function App() {
   return (
     <div className="app-shell">
+      <TopNavbar />
       <main>
         <HeroSection />
-        <AboutSection />
+        <DashboardHighlightsSection />
         <PredictionFormSection />
         <VisualizationsSection />
         <PipelineSection />

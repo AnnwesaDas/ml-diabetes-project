@@ -11,7 +11,6 @@ import sys
 import warnings
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import (
@@ -31,7 +30,11 @@ from utils.preprocessing import preprocess_data
 warnings.filterwarnings("ignore")
 
 # Define paths
-DATA_PATH = Path(__file__).parent.parent / "data" / "diabetes.csv"
+PROJECT_ROOT = Path(__file__).parent.parent
+DATA_CANDIDATES = [
+    PROJECT_ROOT / "data" / "diabetes.csv",
+    PROJECT_ROOT / "diabetes.csv",
+]
 MODEL_DIR = Path(__file__).parent / "model"
 MODEL_DIR.mkdir(exist_ok=True)
 
@@ -39,6 +42,17 @@ MODEL_DIR.mkdir(exist_ok=True)
 CLF_MODEL_PATH = MODEL_DIR / "classifier_model.pkl"
 REG_MODEL_PATH = MODEL_DIR / "regression_model.pkl"
 METADATA_PATH = MODEL_DIR / "preprocessing_metadata.pkl"
+
+
+def resolve_dataset_path():
+    """Find dataset path with backward-compatible fallback."""
+    for path in DATA_CANDIDATES:
+        if path.exists():
+            return path
+    raise FileNotFoundError(
+        "Dataset not found. Expected one of: "
+        + ", ".join(str(path) for path in DATA_CANDIDATES)
+    )
 
 
 def train_models():
@@ -50,13 +64,10 @@ def train_models():
     
     # 1. Load dataset
     print("\n1. Loading dataset...")
-    if not DATA_PATH.exists():
-        raise FileNotFoundError(
-            f"Dataset not found at {DATA_PATH}. "
-            "Please ensure diabetes.csv is in the data/ folder."
-        )
-    
-    df = pd.read_csv(DATA_PATH)
+    data_path = resolve_dataset_path()
+    if data_path != DATA_CANDIDATES[0]:
+        print(f"   ! Using fallback dataset path: {data_path}")
+    df = pd.read_csv(data_path)
     print(f"   ✓ Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
     
     # 2. Preprocess data

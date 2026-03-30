@@ -83,12 +83,10 @@ def load_models():
         )
 
 
-@app.before_request
-def before_request():
-    """Ensure models are loaded before handling requests."""
-    global clf_model, reg_model, preprocessing_metadata
+def _ensure_models_loaded():
+    """Fail fast if startup model loading did not complete."""
     if clf_model is None or reg_model is None or preprocessing_metadata is None:
-        load_models()
+        raise RuntimeError("Models are not loaded. Start the API after running train_model.py.")
 
 
 @app.route("/", methods=["GET"])
@@ -135,6 +133,8 @@ def predict():
     """
     
     try:
+        _ensure_models_loaded()
+
         # Get JSON data
         data = request.get_json(force=True)
         
@@ -247,3 +247,6 @@ if __name__ == "__main__":
         print("\nTo fix this, run the training script first:")
         print("  python train_model.py")
         exit(1)
+else:
+    # Load artifacts once when imported by production servers (e.g., gunicorn).
+    load_models()

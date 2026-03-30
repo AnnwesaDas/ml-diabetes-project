@@ -62,6 +62,28 @@ python main.py
 2. Select Python kernel/interpreter
 3. Click Run All
 
+### Option 3: Run Frontend Dashboard (React + Vite)
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend includes:
+- Responsive healthcare-style dashboard UI
+- Prediction form with validation and mock outputs
+- Visualization cards wired to saved plot images
+- ML pipeline timeline and metric cards
+
+Frontend chart assets are placed in:
+- frontend/public/charts/plot_1_glucose_histogram.png
+- frontend/public/charts/plot_2_bmi_vs_glucose_scatter.png
+- frontend/public/charts/plot_3_correlation_heatmap.png
+
+For frontend-specific details, see:
+- frontend/README.md
+
 ## ML Pipeline Covered
 
 | Step | Description |

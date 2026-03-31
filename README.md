@@ -35,6 +35,11 @@ Columns:
 
 ## Requirements
 
+### Python Version (GitHub + Render)
+
+- Backend runtime file: `backend/.python-version`
+- Pinned version: `3.11.11`
+
 Libraries used:
 - pandas
 - numpy

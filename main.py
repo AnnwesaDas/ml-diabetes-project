@@ -1,5 +1,6 @@
 import warnings
 from pathlib import Path
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -212,15 +213,34 @@ print("Predicted Diabetes Outcome:", "Diabetic" if pred_outcome[0] == 1 else "No
 print("\n---- USER INPUT PREDICTION ----")
 warnings.warn("This prediction demo is for educational purposes only and is not medical advice.", UserWarning)
 
+def prompt_number(prompt_text, cast_type, retries=3):
+    """Ask for a numeric value, allowing a few retries for blank/invalid input."""
+    for attempt in range(1, retries + 1):
+        raw = input(prompt_text).strip()
+        if raw == "":
+            print(f"Input cannot be empty. Attempts left: {retries - attempt}")
+            continue
+        try:
+            return cast_type(raw)
+        except ValueError:
+            print(f"Invalid numeric input '{raw}'. Attempts left: {retries - attempt}")
+
+    raise ValueError("Maximum retries reached for numeric input.")
+
+
 try:
-    preg = int(input("Enter Pregnancies: "))
-    glucose = float(input("Enter Glucose: "))
-    bp = float(input("Enter BloodPressure: "))
-    skin = float(input("Enter SkinThickness: "))
-    insulin = float(input("Enter Insulin: "))
-    bmi = float(input("Enter BMI: "))
-    dpf = float(input("Enter DiabetesPedigreeFunction: "))
-    age = int(input("Enter Age: "))
+    # Some VS Code runners execute scripts without interactive stdin.
+    if not sys.stdin or not sys.stdin.isatty():
+        raise RuntimeError("Non-interactive input stream detected.")
+
+    preg = prompt_number("Enter Pregnancies: ", int)
+    glucose = prompt_number("Enter Glucose: ", float)
+    bp = prompt_number("Enter BloodPressure: ", float)
+    skin = prompt_number("Enter SkinThickness: ", float)
+    insulin = prompt_number("Enter Insulin: ", float)
+    bmi = prompt_number("Enter BMI: ", float)
+    dpf = prompt_number("Enter DiabetesPedigreeFunction: ", float)
+    age = prompt_number("Enter Age: ", int)
 
     user_input_clf = pd.DataFrame(
         [[preg, glucose, bp, skin, insulin, bmi, dpf, age, 0, 0, 0, 0, 0]],
@@ -253,5 +273,7 @@ try:
 
 except ValueError as e:
     print(f"Invalid numeric input ({e}). Skipping user prediction.")
+except RuntimeError as e:
+    print(f"{e} Run the script in an interactive terminal to enter values.")
 
 print("\nPROJECT COMPLETED SUCCESSFULLY!")
